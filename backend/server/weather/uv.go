@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	// "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 )
 
 // UVData struct to hold the UV index response
@@ -55,6 +55,10 @@ func getCoordinatesForPlace(placeName string) (float64, float64) {
 // UVIndexGet function modified to return only the UV index value
 func UVIndexGet(placeName string) (float64, error) {
 	lat, lon := getCoordinatesForPlace(placeName)
+	err := godotenv.Load() 
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	uvApiKey := os.Getenv("WEATHER_API_KEY")
 	apiURL := fmt.Sprintf("http://api.openweathermap.org/data/2.5/uvi?lat=%f&lon=%f&appid=%s", lat, lon, uvApiKey)
 

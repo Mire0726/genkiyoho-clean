@@ -7,7 +7,7 @@ import (
 	"os"
 	"fmt"
 
-	// "github.com/joho/godotenv"
+	"github.com/joho/godotenv"
 )
 
 type WeatherResponse struct {
@@ -20,10 +20,10 @@ type WeatherResponse struct {
 }
 
 func CheckWeather(city string) bool {
-	// err := godotenv.Load()
-	// if err != nil {
-	// 	log.Fatal("Error loading .env file")
-	// }
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	weatherApiKey := os.Getenv("WEATHER_API_KEY")
 
 	// OpenWeatherのAPIエンドポイント（都市とAPIキーを指定）

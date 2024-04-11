@@ -1,0 +1,106 @@
+.conditionPage {
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  background-color: #fffbe7;
+}
+
+.conditionHeader {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  background-color: #fffbe7;
+
+  .conditionButton {
+    display: block;
+    width: 10%;
+    font-size: 15px;
+    padding: 10px 20px;
+    text-align: center;
+    background-color: #fcffc8;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+}
+
+.conditionContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px;
+  background-color: #fffbe7;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 20px;
+  width: 600px; // ここでカードの幅を指定
+  height: 500px; // ここでカードの高さを指定
+  display: flex;
+  flex-direction: column;
+  justify-content: center; // 内容物を均等に分散させる
+  color: rgb(70, 69, 69);
+}
+
+.label {
+  display: block; // This ensures that the label takes up the full width and the next element starts on a new line
+  margin-bottom: 10px; // Adds some space below each label
+}
+
+.conditionButton {
+  background-color: #f9f68d; // A pink color for a "cute" look
+  color: rgb(44, 44, 44); // White text to contrast with the pink
+  border: none;
+  border-radius: 15px; // Rounded corners
+  padding: 10px 20px;
+  margin: 20px;
+  font-size: 1em; // Adjust font size as needed
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); // Adds a subtle shadow for depth
+  transition: background-color 0.3s, box-shadow 0.3s; // Smooth transition for hover effec
+}
+
+.selectedConditionButton {
+  background-color: #f8e170; // A distinct teal color for selected buttons
+  color: rgb(0, 0, 0); // White text for contrast
+  border-radius: 25px; // Match the border-radius of other buttons for consistency
+  padding: 10px 20px; // Ensure padding is consistent with other buttons
+  font-size: 1em; // Match font size for consistency
+  cursor: pointer; // Cursor indicates the element is clickable
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); // A subtle shadow to match other buttons
+  transition: background-color 0.3s, box-shadow 0.3s; // Smooth transition for hover effect
+  font-weight: bold;
+}
+
+.formLabel {
+  display: block; // This will ensure the label takes up the full width
+  margin-bottom: 10px; // Add some space after each label
+
+  input {
+    margin: 10px 0;
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #cbc8c8;
+    color: rgb(44, 44, 44);
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: #ffe6a2;
+    }
+  }
+}

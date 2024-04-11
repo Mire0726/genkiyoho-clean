@@ -1,0 +1,5 @@
+build:
+  go:
+    import-path: github.com/Mire0726/Genkiyoho/backend
+  run:
+    - go build -o bin/backend -v github.com/Mire0726/Genkiyoho/backend

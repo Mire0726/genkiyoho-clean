@@ -1,0 +1,418 @@
+openapi: "3.0.2"
+info:
+  title: "Sample API"
+  version: "2.0.0"
+servers:
+  - url: "http://localhost:8080"
+  - url: "http://localhost:3000"
+paths:
+  /users:
+    get:
+      tags:
+        - user
+      summary: "全ユーザーを取得"
+      responses:
+        "200":
+          description: "ユーザーリストの取得に成功しました"
+    post:
+      tags:
+        - user
+      summary: ユーザ情報作成API
+      description: ユーザ情報を作成します。ユーザの名前情報をリクエストで受け取り、ユーザIDと認証用のトークンを生成しデータベースへ保存します。tokenは以降の他のAPIコール時にヘッダに設定をします。
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+        required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+  /conditions:
+    get:
+      tags:
+        - condition
+      summary: "全コンディションを取得"
+      responses:
+        "200":
+          description: "コンディションリストの取得に成功しました"
+  /conditions/cycle:
+    get:
+      tags:
+        - condition
+      summary: "サイクルコンディションを取得"
+      responses:
+        "200":
+          description: "サイクルコンディションの取得に成功しました"
+  /conditions/environment:
+    get:
+      tags:
+        - condition
+      summary: "環境コンディションを取得"
+      responses:
+        "200":
+          description: "環境コンディションの取得に成功しました"
+  /users/me:
+    get:
+      tags:
+        - user
+      summary: "特定のユーザー情報を取得"
+      responses:
+        "200":
+          description: "ユーザー情報の取得に成功"
+      security:
+        - tokenAuth: []
+    put:
+      summary: ユーザー情報の更新
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+      responses:
+        "200":
+          description: ユーザー情報が正常に更新されました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "400":
+          description: 不正なリクエスト
+        "401":
+          description: 認証に失敗しました
+      security:
+        - tokenAuth: []
+  /users/login:
+    post:
+      summary: "ユーザー認証"
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          description: ユーザーが正常に認証されました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        "400":
+          description: 不正なリクエスト
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Invalid request format."
+        "401":
+          description: 認証に失敗しました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Authentication failed."
+  /users/me/condition:
+    get:
+      summary: "特定のユーザーのコンディション一覧を取得"
+      tags:
+        - User Condition
+      responses:
+        "200":
+          description: コンディション一覧が正常に取得されました
+          content:
+            application/json:
+              schema:
+                type: array
+        "400":
+          description: 不正なリクエスト
+        "401":
+          description: 認証に失敗しました
+      security:
+        - tokenAuth: []
+  /users/me/condition/cycle:
+    post:
+      summary: "特定のユーザーのサイクル条件を作成"
+      tags:
+        - User Condition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CycleConditionRequest"
+      responses:
+        "200":
+          description: サイクル条件が正常に作成されました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Cycle condition successfully created."
+        "400":
+          description: 不正なリクエスト
+        "401":
+          description: 認証に失敗しました
+      security:
+        - tokenAuth: []
+  /users/me/condition/environment:
+    post:
+      summary: "特定のユーザーの環境条件を作成"
+      tags:
+        - User Condition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EnvironmentConditionRequest"
+      responses:
+        "200":
+          description: 環境条件が正常に作成されました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Environment condition successfully created."
+        "400":
+          description: 不正なリクエスト
+        "401":
+          description: 認証に失敗しました
+      security:
+        - tokenAuth: []
+  /users/me/condition/today/cycle:
+    get:
+      summary: "特定のユーザーの今日のサイクル条件を取得"
+      tags:
+        - User Condition
+      responses:
+        "200":
+          description: サイクル条件が正常に取得されました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  condition_id:
+                    type: integer
+                    description: "コンディションID"
+                  start_date:
+                    type: string
+                    format: date
+                    description: "開始日"
+                  duration:
+                    type: integer
+                    description: "期間（日数）"
+                  cycle_length:
+                    type: integer
+                    description: "周期の長さ（日数）"
+                  damage_point:
+                    type: integer
+                    description: "ダメージポイント"
+        "400":
+          description: 不正なリクエスト
+        "401":
+          description: 認証に失敗しました
+      security:
+        - tokenAuth: []
+  /users/me/condition/today/environment:
+    get:
+      summary: "特定のユーザーの今日の環境条件を取得"
+      tags:
+        - User Condition
+      responses:
+        "200":
+          description: 環境条件が正常に取得されました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  condition_id:
+                    type: integer
+                    description: "コンディションID"
+                  start_date:
+                    type: string
+                    format: date
+                    description: "日付"
+                  region:
+                    type: string
+                    description: "地域"
+                  count:
+                    type: integer
+                    description: "カウント（例：花粉の数）"
+                  damage_point:
+                    type: integer
+                    description: "ダメージポイント"
+        "400":
+          description: 不正なリクエスト
+        "401":
+          description: 認証に失敗しました
+      security:
+        - tokenAuth: []
+  /users/me/condition/today:
+    get:
+      summary: "特定のユーザーの今日の環境条件を取得"
+      tags:
+        - User Condition
+      responses:
+        "200":
+          description: 環境条件が正常に取得されました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  condition_name:
+                    type: string
+                    description: "コンディション名"
+                  damage_point:
+                    type: integer
+                    description: "ダメージポイント"
+        "400":    
+          description: 不正なリクエスト
+        "401":
+          description: 認証に失敗しました
+      security:
+        - tokenAuth: []
+  /users/me/condition/today/point:
+    get:
+      summary: "特定のユーザーの今日の環境条件を取得"
+      tags:
+        - User Condition
+      responses:
+        "200":
+          description: ダメージポイントが正常に取得されました
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  point:
+                    type: integer
+                    description: "ダメージポイント"
+        "400":
+          description: 不正なリクエスト
+        "401":
+          description: 認証に失敗しました
+      security:
+        - tokenAuth: []
+components:
+  schemas:
+    CycleConditionRequest:
+      type: object
+      properties:
+        condition_id:
+          type: integer
+          description: "コンディションID"
+        start_date:
+          type: string
+          format: date
+          description: "開始日"
+        duration:
+          type: integer
+          description: "期間（日数）"
+        cycle_length:
+          type: integer
+          description: "周期の長さ（日数）"
+        damage_point:
+          type: integer
+          description: "ダメージポイント"
+      required:
+        - condition_id
+        - condition_name
+        - start_date
+        - duration
+        - cycle_length
+        - damage_point
+    EnvironmentConditionRequest:
+      type: object
+      properties:
+        condition_id:
+          type: integer
+          description: "コンディションID"
+        start_date:
+          type: string
+          format: date
+          description: "日付"
+        region:
+          type: string
+          description: "地域"
+        count:
+          type: integer
+          description: "カウント（例：花粉の数）"
+        damage_point:
+          type: integer
+          description: "ダメージポイント"
+      required:
+        - condition_id
+        - start_date
+        - region
+        - count
+        - damage_point
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: x-token

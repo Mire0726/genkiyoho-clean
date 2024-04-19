@@ -6,6 +6,7 @@ import (
 
 	"github.com/Mire0726/Genkiyoho/backend/server/handler"
 	"github.com/Mire0726/Genkiyoho/backend/server/http/middleware"
+
 	// "github.com/Mire0726/Genkiyoho/backend/server/weather"
 
 	_ "github.com/go-sql-driver/mysql" // MySQLドライバーをインポート

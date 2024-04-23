@@ -14,39 +14,6 @@ paths:
       responses:
         "200":
           description: "ユーザーリストの取得に成功しました"
-    post:
-      tags:
-        - user
-      summary: ユーザ情報作成API
-      description: ユーザ情報を作成します。ユーザの名前情報をリクエストで受け取り、ユーザIDと認証用のトークンを生成しデータベースへ保存します。tokenは以降の他のAPIコール時にヘッダに設定をします。
-      requestBody:
-        description: Request Body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                email:
-                  type: string
-                password:
-                  type: string
-              required:
-                - name
-                - email
-                - password
-        required: true
-      responses:
-        200:
-          description: A successful response.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
   /conditions:
     get:
       tags:
@@ -81,6 +48,39 @@ paths:
           description: "ユーザー情報の取得に成功"
       security:
         - tokenAuth: []
+    post:
+      tags:
+        - user
+      summary: ユーザ情報作成API
+      description: ユーザ情報を作成します。ユーザの名前情報をリクエストで受け取り、ユーザIDと認証用のトークンを生成しデータベースへ保存します。tokenは以降の他のAPIコール時にヘッダに設定をします。
+      requestBody:
+        description: Request Body
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+        required: true
+      responses:
+        200:
+          description: A successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
     put:
       summary: ユーザー情報の更新
       tags:
@@ -330,7 +330,7 @@ paths:
                   damage_point:
                     type: integer
                     description: "ダメージポイント"
-        "400":    
+        "400":
           description: 不正なリクエスト
         "401":
           description: 認証に失敗しました

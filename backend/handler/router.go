@@ -35,8 +35,6 @@ func StartServer(addr string) {
 	}
 	// ルーティングの設定
 	timeout := time.Second * 10
-	userCreateHandler := handler.NewUserCreateHandler(repo, timeout) // ユーザー作成ハンドラーの生成
-
 	// ミドルウェアの設定
 	e.Use(echomiddleware.Recover()) // パニックリカバリー
 	e.Use(echomiddleware.CORSWithConfig(echomiddleware.CORSConfig{
@@ -50,11 +48,15 @@ func StartServer(addr string) {
 		return c.String(http.StatusOK, "Welcome to Genkiyoho!")
 	})
 
-	e.POST("/users/me", userCreateHandler.Create()) // ユーザー作成エンドポイント
+		userCreateHandler := handler.NewUserCreateHandler(repo, timeout) // ユーザー作成ハンドラーの生成
+		e.POST("/users/me", userCreateHandler.Create()) // ユーザー作成エンドポイント
 
-	// サーバーの起動
-	log.Printf("Server running on %s", addr) // サーバー起動のログ
-	if err := e.Start(addr); err != nil {
-		log.Fatalf("Failed to start server: %v", err) // サーバー起動エラーのハンドリング
-	}
+		userLoginHandler := handler.NewUserLoginHandler(repo, timeout) // ユーザーログインハンドラーの生成
+	    e.POST("/users/login", userLoginHandler.Login()) // ログインAPI
+
+		// サーバーの起動
+		log.Printf("Server running on %s", addr) // サーバー起動のログ
+		if err := e.Start(addr); err != nil {
+			log.Fatalf("Failed to start server: %v", err) // サーバー起動エラーのハンドリング
+		}
 }

@@ -8,6 +8,7 @@ import (
 // UserRepository はユーザーの永続化を抽象化するインターフェイスです。
 type UserRepository interface {
     Insert(ctx context.Context, user *userDomain.User) error
+    Login(ctx context.Context, user *userDomain.User) error
     // Save(ctx context.Context, user *userDomain.User) error
 }
 

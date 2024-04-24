@@ -1,8 +1,14 @@
 package server
 
 import (
+	// "database/sql"
 	"log"
 	"net/http"
+ 
+	"github.com/Mire0726/Genkiyoho/backend/infrastructure/mysql"
+	// repository "github.com/Mire0726/Genkiyoho/backend/infrastructure/repositories"
+
+	// application "github.com/Mire0726/Genkiyoho/backend/application/user"
 
 	"github.com/Mire0726/Genkiyoho/backend/server/handler"
 	"github.com/Mire0726/Genkiyoho/backend/server/http/middleware"
@@ -15,7 +21,7 @@ import (
 )
 
 // Serve はHTTPサーバを起動します。データベース接続を引数に追加。
-func Serve(addr string) {
+func SServe(addr string) {
     e := echo.New()
     
 // ミドルウェアの設定
@@ -28,13 +34,12 @@ func Serve(addr string) {
         AllowMethods: echomiddleware.DefaultCORSConfig.AllowMethods,
         AllowHeaders: []string{"Content-Type", "Accept", "Origin", "X-Token", "Authorization"},
     }))
-    
-
     // ルーティングの設定
     e.GET("/", func(c echo.Context) error {
         return c.String(http.StatusOK, "Welcome to Genkiyoho!")
     })
     e.POST("/users/me", handler.HandleUserCreate()) // ユーザ登録API
+    // ユーザー登録エンドポイントの新しい例
     e.POST("/users/login", handler.HandleUserLogin) // ログインAPI
     e.GET("/users", handler.HandleGetUser()) // ユーザ一覧取得API
     e.GET("conditions",handler.HandleConditionsGet()) // 条件一覧取得API
@@ -57,5 +62,9 @@ func Serve(addr string) {
     if err := e.Start(addr); err != nil {
         log.Fatalf("Failed to start server: %v", err)
     }
+     // データベース接続の確認
+	if db.Conn == nil {
+		log.Fatal("Database connection is not initialized")
+	}
 }
 
